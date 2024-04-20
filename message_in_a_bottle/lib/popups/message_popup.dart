@@ -22,15 +22,15 @@ class MessagePopup extends StatelessWidget {
 
   Widget contentBox(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
-          BoxShadow(
+          const BoxShadow(
             color: Colors.black,
-            offset: Offset(0, 10),
+            offset: const Offset(0, 10),
             blurRadius: 10.0,
           ),
         ],
@@ -40,17 +40,17 @@ class MessagePopup extends StatelessWidget {
         children: [
           Text(
             bottle.text,
-            style: TextStyle(fontSize: 18.0),
+            style: const TextStyle(fontSize: 18.0),
           ),
-          SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
               // Close the message view
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           ElevatedButton(
             onPressed: () {
               
@@ -63,13 +63,13 @@ class MessagePopup extends StatelessWidget {
                   return Center(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      child: BottleCreationPopup(bottle: this.bottle,),
+                      child: BottleCreationPopup(bottle: bottle,),
                     ),
                   );
                 },
               );
             },
-            child: Text('Leave a Bottle'),
+            child: const Text('Leave a Bottle'),
           )
         ],
       ),

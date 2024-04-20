@@ -5,7 +5,7 @@ class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
 
   // Constructor to receive the message
-  BottleCreationPopup({required this.bottle});
+  const BottleCreationPopup({super.key, required this.bottle});
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +37,9 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
+          const Text(
             "Leave a message\n",
-            style: const TextStyle(fontSize: 18.0),
+            style: TextStyle(fontSize: 18.0),
           ),
                     // Text input box for the bottle message
           TextFormField(
