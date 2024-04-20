@@ -1,0 +1,6 @@
+{
+  "appTitle": "message_in_a_bottle",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
