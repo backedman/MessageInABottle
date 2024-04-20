@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "893243753130",
+    "project_id": "message-in-a-bottle-7ebe4",
+    "storage_bucket": "message-in-a-bottle-7ebe4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893243753130:android:8a3860be2585ca8f5686d3",
+        "android_client_info": {
+          "package_name": "com.example.message_in_a_bottle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6JN5JBcooOYZ0K1Yeg6eWtzeeylAtuuY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

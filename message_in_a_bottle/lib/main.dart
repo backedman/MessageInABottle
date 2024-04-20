@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:message_in_a_bottle/pages/login.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/pages/map_page.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  Widget homePage;
+  
 
-  homePage = const MapPage();
+  Widget homePage = const LoginPage();
+
+  FirebaseAuth.instance
+  .authStateChanges()
+  .listen((User? user) { 
+    if (user == null) {
+      print('User is currently signed out!');
+      // homePage = const LoginPage();
+    } else {
+      print('User is signed in!');
+      homePage = MapPage(user: user);
+    }
+  }
+  );
 
   runApp(
     MultiProvider(
