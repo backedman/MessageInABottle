@@ -6,6 +6,7 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:message_in_a_bottle/curr_user_location.dart';
+import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/utils/global_objects.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
 import 'package:provider/provider.dart';
