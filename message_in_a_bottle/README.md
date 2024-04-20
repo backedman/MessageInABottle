@@ -1,6 +1,6 @@
 # message_in_a_bottle
 
-A new Flutter project.
+A new Flutter project
 
 ## Getting Started
 
