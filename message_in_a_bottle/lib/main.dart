@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:message_in_a_bottle/curr_user_location.dart';
-import 'package:message_in_a_bottle/map_page.dart';
+import 'package:message_in_a_bottle/providers/curr_user_location.dart';
+import 'package:message_in_a_bottle/pages/map_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
