@@ -9,14 +9,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // initializes Firebase connection
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  
-
   Widget homePage = const LoginPage();
 
+  // checks if the user is logged in; if not, they are sent to the login page
   FirebaseAuth.instance
   .authStateChanges()
   .listen((User? user) { 
