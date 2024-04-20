@@ -6,12 +6,12 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:message_in_a_bottle/curr_user_location.dart';
-import 'package:message_in_a_bottle/global_objects.dart';
+import 'package:message_in_a_bottle/utils/global_objects.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key});
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -83,48 +83,42 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraint) => Column(
-          children: [
-            Center(
-              child: Text(
-                "Map",
-                style: TextStyle(
-                  fontSize: 0.1 * constraint.biggest.shortestSide,
+              children: [
+                Center(
+                  child: Text(
+                    "Map",
+                    style: TextStyle(
+                        fontSize: 0.1 * constraint.biggest.shortestSide),
+                    textAlign: TextAlign.start,
+                  ),
                 ),
-                textAlign: TextAlign.start,
-              ),
-            ),
-            Consumer<CurrentUserLocationProvider>(
-              builder: (context, state, child) {
-                Position? currentPosition = state.currentPosition;
-                if (currentPosition == null) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return SizedBox(
-                    height: constraint.biggest.shortestSide,
-                    width: 0.75 * constraint.biggest.shortestSide,
-                    child: FlutterMap(
-                      options: MapOptions(
-                        initialCenter: LatLng(
-                          currentPosition.latitude,
-                          currentPosition.longitude,
-                        ),
-                        initialZoom: 19,
-                      ),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        ),
-                        CurrentLocationLayer(
-                          alignPositionOnUpdate: AlignOnUpdate.always,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
+                Consumer<CurrentUserLocationProvider>(
+                    builder: (context, state, child) {
+                  Position? currentPosition = state.currentPosition;
+                  if (currentPosition == null) {
+                    return const CircularProgressIndicator();
+                  } else {
+                    return SizedBox(
+                      height: constraint.biggest.shortestSide,
+                      width: 0.75 * constraint.biggest.shortestSide,
+                      child: FlutterMap(
+                          options: MapOptions(
+                              initialCenter: LatLng(currentPosition.latitude,
+                                  currentPosition.longitude),
+                              initialZoom: 19),
+                          children: [
+                            TileLayer(
+                              urlTemplate:
+                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            ),
+                            CurrentLocationLayer(
+                              alignPositionOnUpdate: AlignOnUpdate.always,
+                            ),
+                          ]),
+                    );
+                  }
+                })
+              ],
         ),
       ),
     floatingActionButton: Builder(
