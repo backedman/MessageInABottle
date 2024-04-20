@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:message_in_a_bottle/global_objects.dart';
+import 'package:message_in_a_bottle/popups/message_popup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -116,7 +118,23 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+          onPressed: () {
+            // Create a dummy Bottle object for demonstration
+            Bottle bottle = Bottle("Hello from the bottle", "1", "2");
+
+            // Show the message popup
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: MessagePopup(bottle: bottle),
+                  ),
+                );
+              },
+            );
+          },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

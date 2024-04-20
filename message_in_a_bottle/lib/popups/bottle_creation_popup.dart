@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:message_in_a_bottle/global_objects.dart';
-import 'package:message_in_a_bottle/popups/bottle_creation_popup.dart';
 
-class MessagePopup extends StatelessWidget {
+class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
 
   // Constructor to receive the message
-  MessagePopup({required this.bottle});
+  BottleCreationPopup({required this.bottle});
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +21,12 @@ class MessagePopup extends StatelessWidget {
 
   Widget contentBox(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black,
             offset: Offset(0, 10),
@@ -39,38 +38,26 @@ class MessagePopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            bottle.text,
-            style: TextStyle(fontSize: 18.0),
+            "Leave a message\n",
+            style: const TextStyle(fontSize: 18.0),
           ),
-          SizedBox(height: 20.0),
+                    // Text input box for the bottle message
+          TextFormField(
+            decoration: const InputDecoration(
+              labelText: 'Enter your message',
+              border: OutlineInputBorder(),
+            ),
+            maxLines: 3, // Adjust the number of lines as needed
+          ),
+          const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
               // Close the message view
               Navigator.of(context).pop();
             },
-            child: Text('OK'),
+            child: const Text('OK'),
           ),
-          SizedBox(height: 10.0),
-          ElevatedButton(
-            onPressed: () {
-              
-              Navigator.of(context).pop();
-              
-              // Show the bottle creation popup
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: BottleCreationPopup(bottle: this.bottle,),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Text('Leave a Bottle'),
-          )
+                    const SizedBox(height: 20.0),
         ],
       ),
     );
