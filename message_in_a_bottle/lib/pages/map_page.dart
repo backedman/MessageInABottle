@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 class MapPage extends StatefulWidget {
   final User? user;
   const MapPage({super.key, required this.user});
-  
 
   @override
   State<MapPage> createState() => _MapPageState(user);
@@ -28,7 +27,7 @@ class _MapPageState extends State<MapPage> {
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
-  
+
   _MapPageState(this.user);
 
   void _initLocationStream() async {
@@ -88,99 +87,113 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
-    if(context.mounted) {
+    if (context.mounted) {
       Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage())
-      );
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: LayoutBuilder(
-          builder: (context, constraint) => Column(
-            children: [
-              Center(
-                child: Text(
-                  "Map",
-                  style: TextStyle(
-                      fontSize: 0.1 * constraint.biggest.shortestSide),
-                  textAlign: TextAlign.start,
+      body: LayoutBuilder(
+        builder: (context, constraint) => Column(
+          children: [
+            Center(
+              child: Text(
+                "Map",
+                style:
+                    TextStyle(fontSize: 0.1 * constraint.biggest.shortestSide),
+                textAlign: TextAlign.start,
+              ),
+            ),
+            Center(
+              child: SizedBox(
+                child: RawMaterialButton(
+                  fillColor: Colors.blue,
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  onPressed: () async {
+                    await logOut();
+                  },
+                  child: const Text(
+                    'Log Out',
+                    style: TextStyle(color: Colors.white, fontSize: 20.0),
+                  ),
                 ),
               ),
-              Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
-                  builder: (context, state, locState, child) {
-                Position? currentPosition = state.currentPosition;
-                if (currentPosition == null) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return SizedBox(
-                    height: constraint.biggest.shortestSide,
-                    width: 0.75 * constraint.biggest.shortestSide,
-                    child: FlutterMap(
-                        options: MapOptions(
-                            initialCenter: LatLng(currentPosition.latitude,
-                                currentPosition.longitude),
-                            initialZoom: 18),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          ),
-                          CurrentLocationLayer(
-                            style: const LocationMarkerStyle(
-                                showAccuracyCircle: false),
-                            alignPositionOnUpdate: AlignOnUpdate.always,
-                          ),
-                          MarkerLayer(
-                              markers: locState.bottles
-                                  .map(
-                                    (bottle) => Marker(
-                                        point: bottle.location,
-                                        child: GestureDetector(
-                                          child: const Icon(
-                                              Icons.location_off_outlined),
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                    child: MessagePopup(
-                                                        bottle: bottle,
-                                                        user: user!.displayName!),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        )),
-                                  )
-                                  .toList()),
-                          CircleLayer(circles: [
-                            CircleMarker(
-                                useRadiusInMeter: true,
-                                point: LatLng(currentPosition.latitude,
-                                    currentPosition.longitude),
-                                color: Colors.blue.withOpacity(0.1),
-                                borderStrokeWidth: 3.0,
-                                borderColor: Colors.blue,
-                                radius: 20)
-                          ])
-                        ]),
-                  );
-                }
-              })
-            ],
-          ),
+            ),
+            Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
+                builder: (context, state, locState, child) {
+              Position? currentPosition = state.currentPosition;
+              if (currentPosition == null) {
+                return const CircularProgressIndicator();
+              } else {
+                return SizedBox(
+                  height: constraint.biggest.shortestSide,
+                  width: 0.75 * constraint.biggest.shortestSide,
+                  child: FlutterMap(
+                      options: MapOptions(
+                          initialCenter: LatLng(currentPosition.latitude,
+                              currentPosition.longitude),
+                          initialZoom: 18),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        ),
+                        CurrentLocationLayer(
+                          style: const LocationMarkerStyle(
+                              showAccuracyCircle: false),
+                          alignPositionOnUpdate: AlignOnUpdate.always,
+                        ),
+                        MarkerLayer(
+                            markers: locState.bottles
+                                .map(
+                                  (bottle) => Marker(
+                                      point: bottle.location,
+                                      child: GestureDetector(
+                                        child: const Icon(
+                                            Icons.location_off_outlined),
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.8,
+                                                  child: MessagePopup(
+                                                      bottle: bottle,
+                                                      user: user!.displayName!),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      )),
+                                )
+                                .toList()),
+                        CircleLayer(circles: [
+                          CircleMarker(
+                              useRadiusInMeter: true,
+                              point: LatLng(currentPosition.latitude,
+                                  currentPosition.longitude),
+                              color: Colors.blue.withOpacity(0.1),
+                              borderStrokeWidth: 3.0,
+                              borderColor: Colors.blue,
+                              radius: 20)
+                        ])
+                      ]),
+                );
+              }
+            })
+          ],
         ),
-  );
+      ),
+    );
   }
 }
