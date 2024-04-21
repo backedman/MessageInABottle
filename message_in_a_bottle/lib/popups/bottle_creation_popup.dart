@@ -1,11 +1,7 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:message_in_a_bottle/utils/database_operations.dart';
 import 'package:message_in_a_bottle/utils/global_objects.dart';
-import 'dart:math';
-
 
 class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
