@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
+import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/utils/database_operations.dart';
+import 'package:provider/provider.dart';
 
 class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
@@ -65,7 +67,9 @@ class BottleCreationPopup extends StatelessWidget {
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
-              writeBottle(user, message, bottle.city, bottle.location); //TODO: add the ability to get the city of the user.
+              final bottleProvider = Provider.of<BottleLocationsProvider>(context, listen: false);
+              bottleProvider.removeBottle(bottle);
+              writeBottle(bottle.user, message, bottle.city, bottle.location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),
