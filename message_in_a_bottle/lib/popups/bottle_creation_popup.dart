@@ -65,11 +65,14 @@ class BottleCreationPopup extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
 
               GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
 
-              var city = GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+              var address = await GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+
+              var city = address.city;
+              
 
               writeBottle(user, message, city, location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
