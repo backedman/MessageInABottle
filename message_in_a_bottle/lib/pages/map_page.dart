@@ -30,6 +30,8 @@ class _MapPageState extends State<MapPage> {
   Position? currentPosition;
   GeoPoint? _lastBottlePlacementPosition;
   List<Bottle> held_bottles = [];
+  List<Marker> _markers = [];
+  
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -60,6 +62,21 @@ class _MapPageState extends State<MapPage> {
             GeoPoint location = GeoPoint(position.latitude, position.longitude);
 
             writeBottle(bottle.user, bottle.text, bottle.city, location);
+
+
+          // Create a marker at the current location
+          Marker currentLocationMarker = Marker(
+            point: LatLng(position.latitude, position.longitude),
+            child: Opacity(
+              opacity: 0.5,
+              child: Image.asset('assets/inverse_in_a_bottle.png')
+            )
+          );
+
+          // Update the state to include the new marker
+          setState(() {
+            _markers.add(currentLocationMarker);
+          });
 
             print("BOTTLE PLACED");
           }
@@ -217,6 +234,7 @@ class _MapPageState extends State<MapPage> {
                                       )),
                                 )
                                 .toList()),
+                        MarkerLayer(markers: _markers),
                         CircleLayer(circles: [
                           CircleMarker(
                               useRadiusInMeter: true,
