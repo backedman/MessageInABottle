@@ -13,13 +13,12 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  
-
   Widget homePage = const LoginPage();
 
   FirebaseAuth.instance
   .authStateChanges()
-  .listen((User? user) { 
+  .listen((User? user) {
+    print(user.toString());
     if (user == null) {
       print('User is currently signed out!');
       // homePage = const LoginPage();
