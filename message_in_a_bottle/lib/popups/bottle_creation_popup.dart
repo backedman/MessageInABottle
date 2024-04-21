@@ -65,7 +65,9 @@ class BottleCreationPopup extends StatelessWidget {
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
-              writeBottle(user, message, bottle.city, bottle.location); //TODO: add the ability to get the city of the user.
+
+              GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
+              writeBottle(user, message, bottle.city, location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),

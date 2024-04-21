@@ -61,14 +61,14 @@ class _MapPageState extends State<MapPage> {
 
         var rand = Random();
 
-        if(rand.nextDouble() < 0.01) {
+        if(rand.nextDouble() < 0.3) {
 
           if(held_bottles.isNotEmpty){
             var bottle = held_bottles[0];
 
             GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
             
-            writeBottle(bottle.user, bottle.text, bottle.city, bottle.location);
+            writeBottle(bottle.user, bottle.text, bottle.city, location);
             
             print("BOTTLE PLACED");
           }
@@ -186,7 +186,7 @@ class _MapPageState extends State<MapPage> {
                             markers: locState.bottles
                                 .map(
                                   (bottle) => Marker(
-                                      point: bottle.b.location,
+                                      point: bottle.$2.location,
                                       child: GestureDetector(
                                         child: 
                                             Image.asset('assets/message_in_a_bottle.png'),
@@ -194,15 +194,15 @@ class _MapPageState extends State<MapPage> {
                                           if (Geolocator.distanceBetween(
                                                   currentPosition.latitude,
                                                   currentPosition.longitude,
-                                                  bottle.b.location.latitude,
-                                                  bottle.b.location.longitude) <=
+                                                  bottle.$2.location.latitude,
+                                                  bottle.$2.location.longitude) <=
                                               25) {
 
                                             //remove bottle from database
-                                            deleteBottle(bottle.a);
+                                            deleteBottle(bottle.$1);
 
                                             //add bottle to local storage
-                                            held_bottles.add(bottle.b);
+                                            held_bottles.add(bottle.$2);
 
                                             showDialog(
                                               context: context,
@@ -215,7 +215,7 @@ class _MapPageState extends State<MapPage> {
                                                                 .width *
                                                             0.8,
                                                     child: MessagePopup(
-                                                        bottle: bottle.b,
+                                                        bottle: bottle.$2,
                                                         user:
                                                             user!.displayName!),
                                                   ),

@@ -13,7 +13,7 @@ class Pair<T1, T2> {
 
 class BottleLocationsProvider extends ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-  List<Pair<String, Bottle>> bottles = [];
+  List<(String, Bottle)> bottles = [];
 
   BottleLocationsProvider() {
     init();
@@ -30,7 +30,7 @@ class BottleLocationsProvider extends ChangeNotifier {
       for (var bottle in querySnapshot.docs) {
         GeoPoint location = bottle['location'];
         // Use a Map to store key-value pairs for bottle data
-        Pair<String, Bottle> bottleData = (
+        (String, Bottle) bottleData = (
             bottle.id,
             Bottle(
               bottle['message'],
@@ -38,7 +38,7 @@ class BottleLocationsProvider extends ChangeNotifier {
               bottle['city'],
               LatLng(location.latitude, location.longitude),
             )
-        ) as Pair<String, Bottle>;
+        );
         bottles.add(bottleData);
       }
     });
