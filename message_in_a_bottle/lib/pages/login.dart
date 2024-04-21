@@ -155,7 +155,8 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: Container(
+      body: LayoutBuilder(builder: (context, constraint) => Container(
+        height: constraint.maxHeight,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("images/LoginBackGround.png"),
@@ -163,7 +164,8 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
+        child: SingleChildScrollView(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             const Text(
@@ -374,8 +376,9 @@ class LoginPageState extends State<LoginPage> {
               ),
             ),
           ],
-        ),
-      ),
+        )),
+      )),
     ));
   }
 }
+

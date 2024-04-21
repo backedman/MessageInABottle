@@ -10,7 +10,6 @@ class Pair<T1, T2> {
   Pair(this.a, this.b);
 }
 
-
 class BottleLocationsProvider extends ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   List<(String, Bottle)> bottles = [];
@@ -31,16 +30,23 @@ class BottleLocationsProvider extends ChangeNotifier {
         GeoPoint location = bottle['location'];
         // Use a Map to store key-value pairs for bottle data
         (String, Bottle) bottleData = (
-            bottle.id,
-            Bottle(
-              bottle['message'],
-              bottle['user'],
-              bottle['city'],
-              LatLng(location.latitude, location.longitude),
-            )
+          bottle.id,
+          Bottle(
+            bottle['message'],
+            bottle['user'],
+            bottle['city'],
+            LatLng(location.latitude, location.longitude),
+          )
         );
         bottles.add(bottleData);
       }
     });
+  }
+
+  Future<void> removeBottle(Bottle bottle) async {
+    (String, Bottle) botToRemove = bottles.firstWhere((tuple) => tuple.$2 == bottle);
+
+    bottles.remove(botToRemove);
+    notifyListeners();
   }
 }

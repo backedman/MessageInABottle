@@ -51,14 +51,6 @@ class _MapPageState extends State<MapPage> {
         _lastBottlePlacementPosition ??=
             GeoPoint(position.latitude, position.longitude);
 
-        // Check if the distance moved since the last bottle placement is greater than the threshold
-        double distanceMoved = Geolocator.distanceBetween(
-          _lastBottlePlacementPosition!.latitude,
-          _lastBottlePlacementPosition!.longitude,
-          position.latitude,
-          position.longitude,
-        );
-
         var rand = Random();
 
         if (rand.nextDouble() < 0.3) {
@@ -128,76 +120,79 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraint) => Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                  'images/MapBackGround.png'), // replace with your image asset
-              fit: BoxFit.cover,
-            ),
+        body: LayoutBuilder(
+      builder: (context, constraint) => Container(
+        height: constraint.maxHeight,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'images/MapBackGround.png'), // replace with your image asset
+            fit: BoxFit.cover,
           ),
-          child: Column(
-            children: [
-              Center(
-                child: Text(
-                  "Explore & Read!",
-                  style: TextStyle(
-                      fontSize: 0.1 * constraint.biggest.shortestSide,
-                      color: Colors
-                          .white, // set the text color to white for better visibility
-                      fontFamily: 'BebasNeue'),
-                  textAlign: TextAlign.start,
-                ),
+        ),
+        child: SingleChildScrollView(
+            child: Column(
+          children: [
+            Center(
+              child: Text(
+                "Explore & Read!",
+                style: TextStyle(
+                    fontSize: 0.1 * constraint.biggest.shortestSide,
+                    color: Colors
+                        .white, // set the text color to white for better visibility
+                    fontFamily: 'BebasNeue'),
+                textAlign: TextAlign.start,
               ),
-              Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
-                  builder: (context, state, locState, child) {
-                Position? currentPosition = state.currentPosition;
-                if (currentPosition == null) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 3.0),
-                    ),
-                    height: constraint.biggest.shortestSide,
-                    width: 0.95 * constraint.biggest.shortestSide,
-                    child: FlutterMap(
-                        options: MapOptions(
-                            initialCenter: LatLng(currentPosition.latitude,
-                                currentPosition.longitude),
-                            initialZoom: 18),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                          ),
-                          CurrentLocationLayer(
-                            style: const LocationMarkerStyle(
-                                showAccuracyCircle: false),
-                            alignPositionOnUpdate: AlignOnUpdate.always,
-                          ),
-                          MarkerLayer(
-                              markers: locState.bottles
-                                  .map(
-                                    (bottle) => Marker(
-                                        point: bottle.$2.location,
-                                        child: GestureDetector(
-                                          child: Image.asset(
-                                              'assets/message_in_a_bottle.png'),
-                                          onTap: () {
-                                            if (Geolocator.distanceBetween(
-                                                    currentPosition.latitude,
-                                                    currentPosition.longitude,
-                                                    bottle.$2.location.latitude,
-                                                    bottle.$2.location
-                                                        .longitude) <=
-                                                25) {
-                                              //remove bottle from database
-                                              deleteBottle(bottle.$1);
+            ),
+            Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
+                builder: (context, state, locState, child) {
+              Position? currentPosition = state.currentPosition;
+              if (currentPosition == null) {
+                return const CircularProgressIndicator();
+              } else {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 3.0),
+                  ),
+                  height: constraint.biggest.shortestSide,
+                  width: 0.95 * constraint.biggest.shortestSide,
+                  child: FlutterMap(
+                      options: MapOptions(
+                          initialCenter: LatLng(currentPosition.latitude,
+                              currentPosition.longitude),
+                          initialZoom: 18),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        ),
+                        CurrentLocationLayer(
+                          style: const LocationMarkerStyle(
+                              showAccuracyCircle: false),
+                          alignPositionOnUpdate: AlignOnUpdate.always,
+                        ),
+                        MarkerLayer(
+                            markers: locState.bottles
+                                .map(
+                                  (bottle) => Marker(
+                                      point: bottle.$2.location,
+                                      child: GestureDetector(
+                                        child: Image.asset(
+                                            'assets/message_in_a_bottle.png'),
+                                        onTap: () {
+                                          if (Geolocator.distanceBetween(
+                                                  currentPosition.latitude,
+                                                  currentPosition.longitude,
+                                                  bottle.$2.location.latitude,
+                                                  bottle
+                                                      .$2.location.longitude) <=
+                                              25) {
+                                            //remove bottle from database
+                                            deleteBottle(bottle.$1);
+                                            Provider.of<BottleLocationsProvider>(context, listen: false).removeBottle(bottle.$2);
 
-                                              //add bottle to local storage
-                                              held_bottles.add(bottle.$2);
+                                            //add bottle to local storage
+                                            held_bottles.add(bottle.$2);
 
                                               showDialog(
                                                 context: context,
@@ -265,6 +260,6 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 }

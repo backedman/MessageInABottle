@@ -24,6 +24,7 @@ class MessagePopup extends StatelessWidget {
   Widget contentBox(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
@@ -36,6 +37,7 @@ class MessagePopup extends StatelessWidget {
           ),
         ],
       ),
+      child: Column(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
