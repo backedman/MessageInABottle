@@ -154,8 +154,8 @@ class _MapPageState extends State<MapPage> {
                                   (bottle) => Marker(
                                       point: bottle.location,
                                       child: GestureDetector(
-                                        child: const Icon(
-                                            Icons.location_off_outlined),
+                                        child: 
+                                            Image.asset('assets/message_in_a_bottle.png'),
                                         onTap: () {
                                           showDialog(
                                             context: context,
