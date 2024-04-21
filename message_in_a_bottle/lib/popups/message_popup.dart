@@ -23,7 +23,7 @@ class MessagePopup extends StatelessWidget {
 
   Widget contentBox(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
@@ -36,27 +36,26 @@ class MessagePopup extends StatelessWidget {
           ),
         ],
       ),
-        child: Column(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              bottle.text,
-              style: const TextStyle(fontSize: 18.0),
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                // Close the message view
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
+        children: [
+          Text(
+            bottle.text,
+            style: const TextStyle(fontSize: 18.0),
+          ),
+          const SizedBox(height: 20.0),
+          ElevatedButton(
+            onPressed: () {
+              // Close the message view
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
           const SizedBox(height: 10.0),
           ElevatedButton(
             onPressed: () {
-              
               Navigator.of(context).pop();
-              
+
               // Show the bottle creation popup
               showDialog(
                 context: context,

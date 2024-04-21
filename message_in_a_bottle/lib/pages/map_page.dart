@@ -189,6 +189,7 @@ class _MapPageState extends State<MapPage> {
                                               25) {
                                             //remove bottle from database
                                             deleteBottle(bottle.$1);
+                                            Provider.of<BottleLocationsProvider>(context, listen: false).removeBottle(bottle.$2);
 
                                             //add bottle to local storage
                                             held_bottles.add(bottle.$2);

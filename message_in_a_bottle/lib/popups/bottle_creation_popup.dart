@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
-import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/utils/database_operations.dart';
-import 'package:provider/provider.dart';
 
 class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
@@ -28,7 +26,6 @@ class BottleCreationPopup extends StatelessWidget {
   }
 
   Widget contentBox(BuildContext context) {
-
     String message = "none";
 
     return Container(
@@ -48,40 +45,40 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           const Text(
             "Leave a message\n",
             style: TextStyle(fontSize: 18.0),
           ),
-                    // Text input box for the bottle message
+          // Text input box for the bottle message
           TextFormField(
             decoration: const InputDecoration(
               labelText: 'Enter your message',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,
-              onChanged: (value) {
+            onChanged: (value) {
               // Update the _message variable when the text changes
-                message = value;
+              message = value;
             }, // Adjust the number of lines as needed
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () async {
+              GeoPoint location =
+                  GeoPoint(bottle.location.latitude, bottle.location.longitude);
 
-              GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
-
-              var address = await GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+              var address = await GeoCode().reverseGeocoding(
+                  latitude: bottle.location.latitude,
+                  longitude: bottle.location.longitude);
 
               var city = address.city;
 
-              Provider.of<BottleLocationsProvider>(context, listen: false).removeBottle(bottle);
               writeBottle(user, message, city, location);
               Navigator.of(context).pop();
             },
             child: const Text('OK'),
           ),
-                    const SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
         ],
       ),
     );
