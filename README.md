@@ -1,5 +1,10 @@
 # Message In A Bottle
 
+
+![image](https://github.com/backedman/MessageInABottle/assets/43095558/d92316e8-1011-4a5c-943f-9891ddc68cbb)
+![image](https://github.com/backedman/MessageInABottle/assets/43095558/6ec9e917-9cf1-4b64-bb24-841bdd802208)
+![image](https://github.com/backedman/MessageInABottle/assets/43095558/e8abfc90-60c4-4661-a96e-e6620d0397ca)
+
 ## Inspiration
 We were inspired by the concepts of messages in a bottle being washed on on shore and found by random strangers. This concept led us to design the idea of a user collecting random messages while walking, and being able to create their own messages to send out.
 ## What it does
