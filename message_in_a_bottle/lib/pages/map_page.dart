@@ -66,7 +66,7 @@ class _MapPageState extends State<MapPage> {
           if(held_bottles.isNotEmpty){
             var bottle = held_bottles.removeLast();
 
-            GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
+            GeoPoint location = GeoPoint(position.latitude, position.longitude);
             
             writeBottle(bottle.user, bottle.text, bottle.city, location);
             
