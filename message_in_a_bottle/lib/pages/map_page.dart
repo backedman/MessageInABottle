@@ -6,8 +6,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
-import 'package:message_in_a_bottle/utils/global_objects.dart';
+import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
 import 'package:provider/provider.dart';
 
@@ -94,8 +95,8 @@ class _MapPageState extends State<MapPage> {
                   textAlign: TextAlign.start,
                 ),
               ),
-              Consumer<CurrentUserLocationProvider>(
-                  builder: (context, state, child) {
+              Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
+                  builder: (context, state, locState, child) {
                 Position? currentPosition = state.currentPosition;
                 if (currentPosition == null) {
                   return const CircularProgressIndicator();
@@ -114,13 +115,44 @@ class _MapPageState extends State<MapPage> {
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                           ),
                           CurrentLocationLayer(
-                            style: const LocationMarkerStyle(showAccuracyCircle: false),
+                            style: const LocationMarkerStyle(
+                                showAccuracyCircle: false),
                             alignPositionOnUpdate: AlignOnUpdate.always,
                           ),
+                          MarkerLayer(
+                              markers: locState.bottles
+                                  .map(
+                                    (bottle) => Marker(
+                                        point: bottle.location,
+                                        child: GestureDetector(
+                                          child: const Icon(
+                                              Icons.location_off_outlined),
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: MessagePopup(
+                                                        bottle: bottle),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        )),
+                                  )
+                                  .toList()),
                           CircleLayer(circles: [
                             CircleMarker(
                                 useRadiusInMeter: true,
-                                point: LatLng(currentPosition.latitude, currentPosition.longitude),
+                                point: LatLng(currentPosition.latitude,
+                                    currentPosition.longitude),
                                 color: Colors.blue.withOpacity(0.1),
                                 borderStrokeWidth: 3.0,
                                 borderColor: Colors.blue,
@@ -137,7 +169,8 @@ class _MapPageState extends State<MapPage> {
           builder: (context) => FloatingActionButton(
             onPressed: () {
               // Create a dummy Bottle object for demonstration
-              Bottle bottle = Bottle("Hello from the bottle", "1", "2");
+              Bottle bottle =
+                  Bottle("Hello from the bottle", "1", "2", LatLng(0, 0));
 
               // Show the message popup
               showDialog(

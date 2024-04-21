@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:message_in_a_bottle/utils/global_objects.dart';
+import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/popups/bottle_creation_popup.dart';
 
 class MessagePopup extends StatelessWidget {

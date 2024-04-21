@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:message_in_a_bottle/pages/map_page.dart';
+import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -226,20 +228,25 @@ class LoginPageState extends State<LoginPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Scaffold(
-                          appBar: AppBar(
-                            backgroundColor:
-                                const Color.fromARGB(255, 153, 0, 0),
-                            centerTitle: true,
-                            title: const Text(
-                              "Message in a Bottle",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                          body: MapPage(
-                            user: user,
-                          ),
-                        ),
+                        builder: (context) => MultiProvider(
+                            providers: [
+                              ChangeNotifierProvider(
+                                  create: (_) => BottleLocationsProvider())
+                            ],
+                            child: Scaffold(
+                              appBar: AppBar(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 153, 0, 0),
+                                centerTitle: true,
+                                title: const Text(
+                                  "Message in a Bottle",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              body: MapPage(
+                                user: user,
+                              ),
+                            )),
                       ),
                     );
                   }
