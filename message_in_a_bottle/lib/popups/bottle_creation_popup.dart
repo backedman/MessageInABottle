@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geocode/geocode.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/utils/database_operations.dart';
 
@@ -62,11 +63,16 @@ class BottleCreationPopup extends StatelessWidget {
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
-            onPressed: () {
-              GeoPoint location =
-                  GeoPoint(bottle.location.latitude, bottle.location.longitude);
-              writeBottle(user, message, bottle.city,
-                  location); //TODO: add the ability to get the city of the user.
+            onPressed: () async {
+
+              GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
+
+              var address = await GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+
+              var city = address.city;
+              
+
+              writeBottle(user, message, city, location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),

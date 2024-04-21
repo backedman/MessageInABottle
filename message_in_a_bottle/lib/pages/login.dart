@@ -155,43 +155,29 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/LoginBackGround.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            const Text(
-              "Message In A Bottle",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 80, fontFamily: 'BebasNeue'),
-              textAlign: TextAlign.center,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 93, 30, 98),
-                  width: 2.0,
+      body: LayoutBuilder(
+          builder: (context, constraint) => Container(
+                height: constraint.maxHeight,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("images/LoginBackGround.png"),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextField(
-                    style: const TextStyle(
-                      color: Color.fromARGB(255, 25, 3, 68),
-                      fontSize: 15,
-                      fontFamily: 'Nunito-VariableFont',
-                      fontWeight: FontWeight.bold,
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: SingleChildScrollView(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      "Message In A Bottle",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 80,
+                          fontFamily: 'BebasNeue'),
+                      textAlign: TextAlign.center,
                     ),
+<<<<<<< HEAD
                     controller: usernameController,
                     decoration: const InputDecoration(
                       labelStyle: TextStyle(
@@ -357,24 +343,170 @@ class LoginPageState extends State<LoginPage> {
                           body: MapPage(
                             user: user,
                           ),
+=======
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 93, 30, 98),
+                          width: 2.0,
+>>>>>>> main
                         ),
                       ),
-                    );
-                  }
-                },
-                child: const Text(
-                  'Log In',
-                  style: TextStyle(
-                      color: Color.fromARGB(255, 40, 40, 40),
-                      fontSize: 20.0,
-                      fontFamily: 'Nunito-VariableFont',
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 25, 3, 68),
+                              fontSize: 15,
+                              fontFamily: 'Nunito-VariableFont',
+                              fontWeight: FontWeight.bold,
+                            ),
+                            controller: usernameController,
+                            decoration: const InputDecoration(
+                              labelStyle: TextStyle(
+                                color: Color.fromARGB(255, 25, 3, 68),
+                                fontSize: 15,
+                                fontFamily: 'Nunito-VariableFont',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              labelText: 'Username',
+                              hintText: 'Username (sign-up only)',
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          TextField(
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 25, 3, 68),
+                              fontSize: 15,
+                              fontFamily: 'Nunito-VariableFont',
+                              fontWeight: FontWeight.bold,
+                            ),
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: const InputDecoration(
+                              labelStyle: TextStyle(
+                                color: Color.fromARGB(255, 25, 3, 68),
+                                fontSize: 15,
+                                fontFamily: 'Nunito-VariableFont',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              labelText: 'Email',
+                              hintText: 'Email',
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                          TextField(
+                            style: const TextStyle(
+                              color: Color.fromARGB(255, 25, 3, 68),
+                              fontSize: 15,
+                              fontFamily: 'Nunito-VariableFont',
+                              fontWeight: FontWeight.bold,
+                            ),
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelStyle: TextStyle(
+                                color: Color.fromARGB(255, 25, 3, 68),
+                                fontSize: 15,
+                                fontFamily: 'Nunito-VariableFont',
+                                fontWeight: FontWeight.bold,
+                              ),
+                              labelText: 'Password',
+                              hintText: 'Password (6 or more characters)',
+                            ),
+                          ),
+                          const SizedBox(height: 20.0),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    SizedBox(
+                        width: 200.0,
+                        child: RawMaterialButton(
+                            fillColor: const Color.fromARGB(255, 255, 255, 255),
+                            elevation: 1.0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            onPressed: () async {
+                              User? user = await signUp();
+                              if (user != null && context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Scaffold(
+                                      appBar: AppBar(
+                                        // backgroundColor: const Color.fromARGB(255, 153, 0, 0),
+                                        centerTitle: true,
+                                        title: const Text(
+                                          "Message in a Bottle",
+                                          style: TextStyle(
+                                              color:
+                                                  Color.fromARGB(255, 0, 0, 0)),
+                                        ),
+                                      ),
+                                      body: MapPage(
+                                        user: user,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text('Sign Up',
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 40, 40, 40),
+                                    fontSize: 20.0,
+                                    fontFamily: 'Nunito-VariableFont',
+                                    fontWeight: FontWeight.bold)))),
+                    const SizedBox(height: 5.0),
+                    SizedBox(
+                      width: 200.0,
+                      child: RawMaterialButton(
+                        fillColor: const Color.fromARGB(255, 255, 255, 255),
+                        elevation: 1.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        onPressed: () async {
+                          User? user = await logIn();
+                          if (user != null && context.mounted) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                  appBar: AppBar(
+                                    // backgroundColor: const Color.fromARGB(255, 153, 0, 0),
+                                    centerTitle: true,
+                                    title: const Text(
+                                      "Message in a Bottle",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                                  ),
+                                  body: MapPage(
+                                    user: user,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: const Text(
+                          'Log In',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 40, 40, 40),
+                              fontSize: 20.0,
+                              fontFamily: 'Nunito-VariableFont',
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
+              )),
     ));
   }
 }
