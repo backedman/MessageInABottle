@@ -9,3 +9,5 @@ class Bottle {
 
   Bottle(this.text,this.user,this.city, this.location);
 }
+
+  
