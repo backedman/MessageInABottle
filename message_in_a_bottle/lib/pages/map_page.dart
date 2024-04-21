@@ -157,22 +157,31 @@ class _MapPageState extends State<MapPage> {
                                         child: 
                                             Image.asset('assets/message_in_a_bottle.png'),
                                         onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return Center(
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.8,
-                                                  child: MessagePopup(
-                                                      bottle: bottle,
-                                                      user: user!.displayName!),
-                                                ),
-                                              );
-                                            },
-                                          );
+                                          if (Geolocator.distanceBetween(
+                                                  currentPosition.latitude,
+                                                  currentPosition.longitude,
+                                                  bottle.location.latitude,
+                                                  bottle.location.longitude) <=
+                                              25) {
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: MessagePopup(
+                                                        bottle: bottle,
+                                                        user:
+                                                            user!.displayName!),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }
                                         },
                                       )),
                                 )
