@@ -3,9 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
 
+class Pair<T1, T2> {
+  final T1 a;
+  final T2 b;
+
+  Pair(this.a, this.b);
+}
+
+
 class BottleLocationsProvider extends ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
-  List<Bottle> bottles = [];
+  List<Pair<String, Bottle>> bottles = [];
 
   BottleLocationsProvider() {
     init();
@@ -21,8 +29,17 @@ class BottleLocationsProvider extends ChangeNotifier {
     bottlesCollection.get().then((QuerySnapshot querySnapshot) {
       for (var bottle in querySnapshot.docs) {
         GeoPoint location = bottle['location'];
-        bottles.add(Bottle(bottle['message'], bottle['user'], bottle['city'],
-            LatLng(location.latitude, location.longitude)));
+        // Use a Map to store key-value pairs for bottle data
+        Pair<String, Bottle> bottleData = (
+            bottle.id,
+            Bottle(
+              bottle['message'],
+              bottle['user'],
+              bottle['city'],
+              LatLng(location.latitude, location.longitude),
+            )
+        ) as Pair<String, Bottle>;
+        bottles.add(bottleData);
       }
     });
   }

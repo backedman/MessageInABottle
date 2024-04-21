@@ -1,15 +1,19 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/pages/login.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
+import 'package:message_in_a_bottle/utils/database_operations.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
@@ -24,6 +28,9 @@ class _MapPageState extends State<MapPage> {
   final User? user;
   late StreamSubscription<Position> _positionStream;
   Position? currentPosition;
+  GeoPoint? _lastBottlePlacementPosition;
+  List<Bottle> held_bottles = [];
+
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
@@ -40,6 +47,33 @@ class _MapPageState extends State<MapPage> {
       if (position != null && mounted) {
         Provider.of<CurrentUserLocationProvider>(context, listen: false)
             .updatePosition(position);
+
+        _lastBottlePlacementPosition ??= GeoPoint(position.latitude, position.longitude);
+        
+        
+        // Check if the distance moved since the last bottle placement is greater than the threshold
+        double distanceMoved = Geolocator.distanceBetween(
+          _lastBottlePlacementPosition!.latitude,
+          _lastBottlePlacementPosition!.longitude,
+          position.latitude,
+          position.longitude,
+        );
+
+        var rand = Random();
+
+        if(rand.nextDouble() < 0.01) {
+
+          if(held_bottles.isNotEmpty){
+            var bottle = held_bottles[0];
+
+            GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
+            
+            writeBottle(bottle.user, bottle.text, bottle.city, bottle.location);
+            
+            print("BOTTLE PLACED");
+          }
+
+        }
       }
     });
   }
@@ -152,7 +186,7 @@ class _MapPageState extends State<MapPage> {
                             markers: locState.bottles
                                 .map(
                                   (bottle) => Marker(
-                                      point: bottle.location,
+                                      point: bottle.b.location,
                                       child: GestureDetector(
                                         child: 
                                             Image.asset('assets/message_in_a_bottle.png'),
@@ -160,9 +194,16 @@ class _MapPageState extends State<MapPage> {
                                           if (Geolocator.distanceBetween(
                                                   currentPosition.latitude,
                                                   currentPosition.longitude,
-                                                  bottle.location.latitude,
-                                                  bottle.location.longitude) <=
+                                                  bottle.b.location.latitude,
+                                                  bottle.b.location.longitude) <=
                                               25) {
+
+                                            //remove bottle from database
+                                            deleteBottle(bottle.a);
+
+                                            //add bottle to local storage
+                                            held_bottles.add(bottle.b);
+
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -174,7 +215,7 @@ class _MapPageState extends State<MapPage> {
                                                                 .width *
                                                             0.8,
                                                     child: MessagePopup(
-                                                        bottle: bottle,
+                                                        bottle: bottle.b,
                                                         user:
                                                             user!.displayName!),
                                                   ),
