@@ -40,7 +40,7 @@ class MessagePopup extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            bottle.text,
+            bottle.user + " from " + bottle.city + " says\n\n " + bottle.text,
             style: const TextStyle(fontSize: 18.0),
           ),
           const SizedBox(height: 20.0),
