@@ -80,8 +80,6 @@ flutter:
   assets:
       - images/LoginBackGround.png
       - assets/message_in_a_bottle.png
-      - images/BottleIcon.png
-      - images/MapBackGround.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

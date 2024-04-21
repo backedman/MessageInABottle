@@ -26,6 +26,7 @@ class BottleCreationPopup extends StatelessWidget {
   }
 
   Widget contentBox(BuildContext context) {
+
     String message = "none";
 
     return Container(
@@ -45,20 +46,21 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+
           const Text(
             "Leave a message\n",
             style: TextStyle(fontSize: 18.0),
           ),
-          // Text input box for the bottle message
+                    // Text input box for the bottle message
           TextFormField(
             decoration: const InputDecoration(
               labelText: 'Enter your message',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,
-            onChanged: (value) {
+              onChanged: (value) {
               // Update the _message variable when the text changes
-              message = value;
+                message = value;
             }, // Adjust the number of lines as needed
           ),
           const SizedBox(height: 20.0),
@@ -77,7 +79,7 @@ class BottleCreationPopup extends StatelessWidget {
             },
             child: const Text('OK'),
           ),
-          const SizedBox(height: 20.0),
+                    const SizedBox(height: 20.0),
         ],
       ),
     );
