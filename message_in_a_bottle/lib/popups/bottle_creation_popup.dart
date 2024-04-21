@@ -1,11 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
+import 'package:message_in_a_bottle/utils/database_operations.dart';
 
 class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
+  final String user;
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Constructor to receive the message
-  const BottleCreationPopup({super.key, required this.bottle});
+  BottleCreationPopup({super.key, required this.bottle, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,9 @@ class BottleCreationPopup extends StatelessWidget {
   }
 
   Widget contentBox(BuildContext context) {
+
+    String message = "none";
+
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -37,6 +45,7 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+
           const Text(
             "Leave a message\n",
             style: TextStyle(fontSize: 18.0),
@@ -47,12 +56,16 @@ class BottleCreationPopup extends StatelessWidget {
               labelText: 'Enter your message',
               border: OutlineInputBorder(),
             ),
-            maxLines: 3, // Adjust the number of lines as needed
+            maxLines: 3,
+              onChanged: (value) {
+              // Update the _message variable when the text changes
+                message = value;
+            }, // Adjust the number of lines as needed
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
-              // Close the message view
+              writeBottle(user, message, bottle.city, bottle.location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),

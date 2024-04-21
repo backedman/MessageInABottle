@@ -17,6 +17,7 @@ class LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  /* when called, will attempt to add the user to the authentication database, using the values found in the username, email, and password text controllers. returns the User object associated with the new user, or null if it could not be created */
   Future<User?> signUp() async {
     try {
       final UserCredential userCredential =
@@ -85,6 +86,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
+  /* when called, will attempt to log in to the authentication server, using the values found in the username, email, and password text controllers. returns the User object associated with the user, or null if it could not be found */
   Future<User?> logIn() async {
     try {
       final UserCredential userCredential =
@@ -155,14 +157,25 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Log-In/Sign-Up',
-              style: TextStyle(fontWeight: FontWeight.bold))),
+        backgroundColor: const Color.fromARGB(255, 153, 0, 0),
+        centerTitle: true,
+        title: const Text(
+          "Message in a Bottle",
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            AppBar(
+              centerTitle: true,
+              title: const Text(
+                'Sign-Up/Log-In',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
             TextField(
                 controller: usernameController,
                 decoration: const InputDecoration(

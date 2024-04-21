@@ -4,9 +4,10 @@ import 'package:message_in_a_bottle/popups/bottle_creation_popup.dart';
 
 class MessagePopup extends StatelessWidget {
   final Bottle bottle;
+  final String user;
 
   // Constructor to receive the message
-  const MessagePopup({super.key, required this.bottle});
+  const MessagePopup({super.key, required this.bottle, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class MessagePopup extends StatelessWidget {
                   return Center(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width * 0.8,
-                      child: BottleCreationPopup(bottle: bottle,),
+                      child: BottleCreationPopup(bottle: bottle, user: user),
                     ),
                   );
                 },

@@ -7,24 +7,29 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
+import 'package:message_in_a_bottle/pages/login.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
-import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
   final User? user;
   const MapPage({super.key, required this.user});
+  
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<MapPage> createState() => _MapPageState(user);
 }
 
 class _MapPageState extends State<MapPage> {
+  final User? user;
   late StreamSubscription<Position> _positionStream;
+  Position? currentPosition;
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
+  
+  _MapPageState(this.user);
 
   void _initLocationStream() async {
     final bool enabled = await _handleLocationPermission();
@@ -79,6 +84,16 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     super.initState();
     _initLocationStream();
+  }
+
+  Future<void> logOut() async {
+    await FirebaseAuth.instance.signOut();
+    if(context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage())
+      );
+    }
   }
 
   @override
@@ -139,7 +154,8 @@ class _MapPageState extends State<MapPage> {
                                                                 .width *
                                                             0.8,
                                                     child: MessagePopup(
-                                                        bottle: bottle),
+                                                        bottle: bottle,
+                                                        user: user!.displayName!),
                                                   ),
                                                 );
                                               },
@@ -165,29 +181,6 @@ class _MapPageState extends State<MapPage> {
             ],
           ),
         ),
-        floatingActionButton: Builder(
-          builder: (context) => FloatingActionButton(
-            onPressed: () {
-              // Create a dummy Bottle object for demonstration
-              Bottle bottle =
-                  Bottle("Hello from the bottle", "1", "2", LatLng(0, 0));
-
-              // Show the message popup
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: MessagePopup(bottle: bottle),
-                    ),
-                  );
-                },
-              );
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-        ));
+  );
   }
 }
