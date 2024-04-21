@@ -9,5 +9,5 @@ class Bottle extends Equatable{
   Bottle(this.text,this.user,this.city, this.location);
   
   @override
-  List<Object?> get props => [text, user, city, location];
+  List<Object> get props => [text, user, city, location];
 }
