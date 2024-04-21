@@ -71,10 +71,9 @@ class BottleCreationPopup extends StatelessWidget {
 
               var address = await GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
 
-              var city = address.city;
-              
+              var city = address.city;              
 
-              writeBottle(user, message, city, location); //TODO: add the ability to get the city of the user.
+              writeBottle(user, message, city, location);
               Navigator.of(context).pop();
             },
             child: const Text('OK'),
