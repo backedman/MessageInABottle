@@ -7,9 +7,9 @@ class BottleLocationsProvider extends ChangeNotifier {
   final FirebaseFirestore db = FirebaseFirestore.instance;
   List<Bottle> bottles = [];
 
-  // BottleLocationsProvider() {
-  //   init();
-  // }
+  BottleLocationsProvider() {
+    init();
+  }
 
   Future<void> init() async {
     await getBottlesFromDatabase();
@@ -25,17 +25,5 @@ class BottleLocationsProvider extends ChangeNotifier {
             LatLng(location.latitude, location.longitude)));
       }
     });
-  }
-
-  Future<void> removeBottle(Bottle bottle) async {
-    Bottle? botToRemove;
-    for (Bottle bot in bottles) {
-      if (bot == bottle) {
-        print("Bottle to remove: ${bot.text}");
-
-        botToRemove = bot;
-      }
-    }
-    if (botToRemove != null) bottles.remove(botToRemove);
   }
 }

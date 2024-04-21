@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:message_in_a_bottle/pages/login.dart';
-import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/pages/map_page.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +36,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CurrentUserLocationProvider()),
-        ChangeNotifierProvider(create: (_) => BottleLocationsProvider())
       ],
       child: MaterialApp(
         home: homePage,
