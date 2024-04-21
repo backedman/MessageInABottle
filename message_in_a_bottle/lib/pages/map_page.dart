@@ -61,23 +61,13 @@ class _MapPageState extends State<MapPage> {
 
         var rand = Random();
 
-<<<<<<< HEAD
         if (rand.nextDouble() < 0.3) {
           if (held_bottles.isNotEmpty) {
-            var bottle = held_bottles[0];
-
-            GeoPoint location =
-                GeoPoint(bottle.location.latitude, bottle.location.longitude);
-
-=======
-        if(rand.nextDouble() < 0.3) {
-
-          if(held_bottles.isNotEmpty){
             var bottle = held_bottles.removeLast();
 
-            GeoPoint location = GeoPoint(position.latitude, position.longitude);
-            
->>>>>>> main
+            GeoPoint location =
+                GeoPoint(position.latitude, position.longitude);
+
             writeBottle(bottle.user, bottle.text, bottle.city, location);
 
             print("BOTTLE PLACED");
