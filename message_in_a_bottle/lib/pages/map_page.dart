@@ -114,13 +114,14 @@ class _MapPageState extends State<MapPage> {
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                           ),
                           CurrentLocationLayer(
+                            style: const LocationMarkerStyle(showAccuracyCircle: false),
                             alignPositionOnUpdate: AlignOnUpdate.always,
                           ),
                           CircleLayer(circles: [
                             CircleMarker(
                                 useRadiusInMeter: true,
                                 point: LatLng(currentPosition.latitude, currentPosition.longitude),
-                                color: Colors.blue.withOpacity(0.3),
+                                color: Colors.blue.withOpacity(0.1),
                                 borderStrokeWidth: 3.0,
                                 borderColor: Colors.blue,
                                 radius: 20)
