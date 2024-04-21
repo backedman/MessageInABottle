@@ -1,11 +1,20 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:message_in_a_bottle/utils/global_objects.dart';
+import 'dart:math';
+
 
 class BottleCreationPopup extends StatelessWidget {
   final Bottle bottle;
+  final String user;
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   // Constructor to receive the message
-  const BottleCreationPopup({super.key, required this.bottle});
+  BottleCreationPopup({super.key, required this.bottle, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +29,9 @@ class BottleCreationPopup extends StatelessWidget {
   }
 
   Widget contentBox(BuildContext context) {
+
+    String _message = "none";
+
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -37,6 +49,7 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+
           const Text(
             "Leave a message\n",
             style: TextStyle(fontSize: 18.0),
@@ -47,12 +60,16 @@ class BottleCreationPopup extends StatelessWidget {
               labelText: 'Enter your message',
               border: OutlineInputBorder(),
             ),
-            maxLines: 3, // Adjust the number of lines as needed
+            maxLines: 3,
+              onChanged: (value) {
+              // Update the _message variable when the text changes
+                _message = value;
+            }, // Adjust the number of lines as needed
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () {
-              // Close the message view
+              writeBottle(user, _message, "College Park", bottle.location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),
@@ -61,5 +78,37 @@ class BottleCreationPopup extends StatelessWidget {
         ],
       ),
     );
+  }
+
+
+  void writeBottle(user, message, city, location) {
+
+    var collection = firestore.collection("bottles");
+
+    var doc = {
+      'user' : user,
+      'message': message,
+      'location': location,
+      'city': city
+    };
+
+    collection.add(doc).then((value) {
+      print("Bottle added with ID: ${value.id}");
+    })
+    .catchError((error) {
+      print("Failed to add bottle: $error");
+    });
+  }
+
+  void readData() {
+    firestore.collection('bottles').get()
+    .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        print('${doc.id}: ${doc.data()}');
+      });
+    })
+    .catchError((error) {
+      print("Failed to retrieve bottles: $error");
+    });
   }
 }

@@ -20,7 +20,8 @@ void main() async {
   // checks if the user is logged in; if not, they are sent to the login page
   FirebaseAuth.instance
   .authStateChanges()
-  .listen((User? user) { 
+  .listen((User? user) {
+    print(user.toString());
     if (user == null) {
       print('User is currently signed out!');
       // homePage = const LoginPage();

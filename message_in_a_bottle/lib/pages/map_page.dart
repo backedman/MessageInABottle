@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -16,14 +18,17 @@ class MapPage extends StatefulWidget {
   const MapPage({super.key, required this.user});
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<MapPage> createState() => _MapPageState(user);
 }
 
 class _MapPageState extends State<MapPage> {
+  final User? user;
   late StreamSubscription<Position> _positionStream;
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
+  
+  _MapPageState(this.user);
 
   void _initLocationStream() async {
     final bool enabled = await _handleLocationPermission();
@@ -79,6 +84,8 @@ class _MapPageState extends State<MapPage> {
     super.initState();
     _initLocationStream();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,22 +146,23 @@ class _MapPageState extends State<MapPage> {
               // Create a dummy Bottle object for demonstration
               Bottle bottle = Bottle("Hello from the bottle", "1", "2");
 
-              // Show the message popup
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: MessagePopup(bottle: bottle),
-                    ),
-                  );
-                },
-              );
-            },
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-        ));
+            // Show the message popup
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: MessagePopup(bottle: bottle, user: name),
+                  ),
+                );
+              },
+            );
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ),
+    )
+  );
   }
 }
