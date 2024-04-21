@@ -158,8 +158,8 @@ class LoginPageState extends State<LoginPage> {
           centerTitle: true,
           title: const Text('Log-In/Sign-Up',
               style: TextStyle(fontWeight: FontWeight.bold))),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[

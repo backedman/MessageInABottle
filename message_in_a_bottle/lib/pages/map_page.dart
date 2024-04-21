@@ -83,69 +83,78 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraint) => Column(
-              children: [
-                Center(
-                  child: Text(
-                    "Map",
-                    style: TextStyle(
-                        fontSize: 0.1 * constraint.biggest.shortestSide),
-                    textAlign: TextAlign.start,
-                  ),
+        body: LayoutBuilder(
+          builder: (context, constraint) => Column(
+            children: [
+              Center(
+                child: Text(
+                  "Map",
+                  style: TextStyle(
+                      fontSize: 0.1 * constraint.biggest.shortestSide),
+                  textAlign: TextAlign.start,
                 ),
-                Consumer<CurrentUserLocationProvider>(
-                    builder: (context, state, child) {
-                  Position? currentPosition = state.currentPosition;
-                  if (currentPosition == null) {
-                    return const CircularProgressIndicator();
-                  } else {
-                    return SizedBox(
-                      height: constraint.biggest.shortestSide,
-                      width: 0.75 * constraint.biggest.shortestSide,
-                      child: FlutterMap(
-                          options: MapOptions(
-                              initialCenter: LatLng(currentPosition.latitude,
-                                  currentPosition.longitude),
-                              initialZoom: 19),
-                          children: [
-                            TileLayer(
-                              urlTemplate:
-                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            ),
-                            CurrentLocationLayer(
-                              alignPositionOnUpdate: AlignOnUpdate.always,
-                            ),
-                          ]),
-                    );
-                  }
-                })
-              ],
+              ),
+              Consumer<CurrentUserLocationProvider>(
+                  builder: (context, state, child) {
+                Position? currentPosition = state.currentPosition;
+                if (currentPosition == null) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return SizedBox(
+                    height: constraint.biggest.shortestSide,
+                    width: 0.75 * constraint.biggest.shortestSide,
+                    child: FlutterMap(
+                        options: MapOptions(
+                            initialCenter: LatLng(currentPosition.latitude,
+                                currentPosition.longitude),
+                            initialZoom: 18),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          ),
+                          CurrentLocationLayer(
+                            style: const LocationMarkerStyle(showAccuracyCircle: false),
+                            alignPositionOnUpdate: AlignOnUpdate.always,
+                          ),
+                          CircleLayer(circles: [
+                            CircleMarker(
+                                useRadiusInMeter: true,
+                                point: LatLng(currentPosition.latitude, currentPosition.longitude),
+                                color: Colors.blue.withOpacity(0.1),
+                                borderStrokeWidth: 3.0,
+                                borderColor: Colors.blue,
+                                radius: 20)
+                          ])
+                        ]),
+                  );
+                }
+              })
+            ],
+          ),
         ),
-      ),
-    floatingActionButton: Builder(
-        builder: (context) => FloatingActionButton(
-          onPressed: () {
-            // Create a dummy Bottle object for demonstration
-            Bottle bottle = Bottle("Hello from the bottle", "1", "2");
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            onPressed: () {
+              // Create a dummy Bottle object for demonstration
+              Bottle bottle = Bottle("Hello from the bottle", "1", "2");
 
-            // Show the message popup
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: MessagePopup(bottle: bottle),
-                  ),
-                );
-              },
-            );
-          },
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ),
-    )
-  );
+              // Show the message popup
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Center(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: MessagePopup(bottle: bottle),
+                    ),
+                  );
+                },
+              );
+            },
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+        ));
   }
 }
