@@ -38,16 +38,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CurrentUserLocationProvider()),
       ],
       child: MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              backgroundColor: const Color.fromARGB(255, 153, 0, 0),
-              centerTitle: true,
-              title: const Text(
-                "Message in a Bottle",
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            body: homePage),
+        home: homePage,
       ),
     ),
   );
