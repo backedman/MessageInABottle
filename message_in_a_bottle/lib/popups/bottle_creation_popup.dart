@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geocode/geocode.dart';
 import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/utils/database_operations.dart';
 
@@ -67,7 +68,10 @@ class BottleCreationPopup extends StatelessWidget {
             onPressed: () {
 
               GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
-              writeBottle(user, message, bottle.city, location); //TODO: add the ability to get the city of the user.
+
+              var city = GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+
+              writeBottle(user, message, city, location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
             child: const Text('OK'),
