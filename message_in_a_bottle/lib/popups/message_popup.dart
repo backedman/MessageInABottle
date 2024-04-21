@@ -23,7 +23,7 @@ class MessagePopup extends StatelessWidget {
 
   Widget contentBox(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         color: Colors.white,
@@ -36,41 +36,76 @@ class MessagePopup extends StatelessWidget {
           ),
         ],
       ),
-        child: Column(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              bottle.text,
-              style: const TextStyle(fontSize: 18.0),
+        children: [
+          Text(bottle.user,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18.0, fontFamily: 'BebasNeue')),
+          Text(
+            textAlign: TextAlign.center,
+            "from " + bottle.city + " says:\n ",
+            style: const TextStyle(
+              fontSize: 18.0,
+              fontFamily: 'Nunito-VariableFont',
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
+          ),
+          Text(
+            textAlign: TextAlign.center,
+            "\"" + bottle.text + "\"",
+            style: const TextStyle(
+              fontSize: 15.0,
+              fontFamily: 'Nunito-VariableFont',
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
+          const SizedBox(height: 20.0),
+          SizedBox(
+            width: 200.0,
+            child: ElevatedButton(
               onPressed: () {
                 // Close the message view
                 Navigator.of(context).pop();
               },
-              child: const Text('OK'),
+              child: const Text(
+                'OK',
+                style: const TextStyle(
+                  fontFamily: 'Nunito-VariableFont',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
+          ),
           const SizedBox(height: 10.0),
-          ElevatedButton(
-            onPressed: () {
-              
-              Navigator.of(context).pop();
-              
-              // Show the bottle creation popup
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Center(
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: BottleCreationPopup(bottle: bottle, user: user),
-                    ),
-                  );
-                },
-              );
-            },
-            child: const Text('Leave a Bottle'),
+          SizedBox(
+            width: 200.0,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                // Show the bottle creation popup
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: BottleCreationPopup(bottle: bottle, user: user),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: const Text(
+                'Leave a Bottle',
+                style: const TextStyle(
+                  fontFamily: 'Nunito-VariableFont',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           )
         ],
       ),

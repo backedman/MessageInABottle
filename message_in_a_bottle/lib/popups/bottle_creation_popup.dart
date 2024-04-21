@@ -26,7 +26,6 @@ class BottleCreationPopup extends StatelessWidget {
   }
 
   Widget contentBox(BuildContext context) {
-
     String message = "none";
 
     return Container(
@@ -46,40 +45,67 @@ class BottleCreationPopup extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           const Text(
             "Leave a message\n",
-            style: TextStyle(fontSize: 18.0),
+            style: TextStyle(
+                fontSize: 18.0,
+                fontFamily: 'Nunito-VariableFont',
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
           ),
-                    // Text input box for the bottle message
+          // Text input box for the bottle message
           TextFormField(
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: 'Nunito-VariableFont', fontWeight: FontWeight.bold),
             decoration: const InputDecoration(
               labelText: 'Enter your message',
-              border: OutlineInputBorder(),
+              labelStyle: TextStyle(
+                fontFamily: 'Nunito-VariableFont',
+                fontWeight: FontWeight.bold,
+              ),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 85, 85, 85),
+                  width: 2.0,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 12.0, // adjust the vertical padding as needed
+                horizontal: 16.0, // adjust the horizontal padding as needed
+              ),
             ),
             maxLines: 3,
-              onChanged: (value) {
+            onChanged: (value) {
               // Update the _message variable when the text changes
-                message = value;
+              message = value;
             }, // Adjust the number of lines as needed
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
             onPressed: () async {
+              GeoPoint location =
+                  GeoPoint(bottle.location.latitude, bottle.location.longitude);
 
-              GeoPoint location = GeoPoint(bottle.location.latitude, bottle.location.longitude);
-
-              var address = await GeoCode().reverseGeocoding(latitude: bottle.location.latitude, longitude: bottle.location.longitude);
+              var address = await GeoCode().reverseGeocoding(
+                  latitude: bottle.location.latitude,
+                  longitude: bottle.location.longitude);
 
               var city = address.city;
-              
 
-              writeBottle(user, message, city, location); //TODO: add the ability to get the city of the user.
+              writeBottle(user, message, city,
+                  location); //TODO: add the ability to get the city of the user.
               Navigator.of(context).pop();
             },
-            child: const Text('OK'),
+            child: const Text(
+              'OK',
+              style: TextStyle(
+                  fontSize: 18.0,
+                  fontFamily: 'Nunito-VariableFont',
+                  fontWeight: FontWeight.bold),
+            ),
           ),
-                    const SizedBox(height: 20.0),
+          const SizedBox(height: 20.0),
         ],
       ),
     );

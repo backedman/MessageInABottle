@@ -266,12 +266,34 @@ class LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(
                             builder: (context) => Scaffold(
                               appBar: AppBar(
-                                // backgroundColor: const Color.fromARGB(255, 153, 0, 0),
-                                centerTitle: true,
-                                title: const Text(
-                                  "Message in a Bottle",
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                title: Row(
+                                  children: [
+                                    Image.asset(
+                                      'images/BottleIcon.png', // replace with your image asset
+                                      height: 30,
+                                    ),
+                                    SizedBox(width: 8.0),
+                                    const Text(
+                                      "Message In A Bottle",
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              255, 255, 255, 255),
+                                          fontSize: 30,
+                                          fontFamily: 'BebasNeue'),
+                                    ),
+                                  ],
+                                ),
+                                flexibleSpace: Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(255, 116, 240, 137),
+                                        Color.fromARGB(255, 35, 129, 46),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
                                 ),
                               ),
                               body: MapPage(
@@ -304,12 +326,33 @@ class LoginPageState extends State<LoginPage> {
                       MaterialPageRoute(
                         builder: (context) => Scaffold(
                           appBar: AppBar(
-                            // backgroundColor: const Color.fromARGB(255, 153, 0, 0),
-                            centerTitle: true,
-                            title: const Text(
-                              "Message in a Bottle",
-                              style: TextStyle(
-                                  color: Color.fromARGB(255, 0, 0, 0)),
+                            title: Row(
+                              children: [
+                                Image.asset(
+                                  'images/BottleIcon.png', // replace with your image asset
+                                  height: 30,
+                                ),
+                                SizedBox(width: 8.0),
+                                const Text(
+                                  "Message In A Bottle",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                      fontSize: 30,
+                                      fontFamily: 'BebasNeue'),
+                                ),
+                              ],
+                            ),
+                            flexibleSpace: Container(
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 116, 240, 137),
+                                    Color.fromARGB(255, 35, 129, 46),
+                                  ],
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                ),
+                              ),
                             ),
                           ),
                           body: MapPage(

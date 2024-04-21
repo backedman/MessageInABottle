@@ -65,8 +65,7 @@ class _MapPageState extends State<MapPage> {
           if (held_bottles.isNotEmpty) {
             var bottle = held_bottles.removeLast();
 
-            GeoPoint location =
-                GeoPoint(position.latitude, position.longitude);
+            GeoPoint location = GeoPoint(position.latitude, position.longitude);
 
             writeBottle(bottle.user, bottle.text, bottle.city, location);
 
@@ -256,7 +255,8 @@ class _MapPageState extends State<MapPage> {
                       style: TextStyle(
                           color: Color.fromARGB(255, 0, 0, 0),
                           fontSize: 20.0,
-                          fontFamily: 'Nunito-VariableFont'),
+                          fontFamily: 'Nunito-VariableFont',
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
