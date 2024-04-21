@@ -48,9 +48,9 @@ class _MapPageState extends State<MapPage> {
         Provider.of<CurrentUserLocationProvider>(context, listen: false)
             .updatePosition(position);
 
-        _lastBottlePlacementPosition ??= GeoPoint(position.latitude, position.longitude);
-        
-        
+        _lastBottlePlacementPosition ??=
+            GeoPoint(position.latitude, position.longitude);
+
         // Check if the distance moved since the last bottle placement is greater than the threshold
         double distanceMoved = Geolocator.distanceBetween(
           _lastBottlePlacementPosition!.latitude,
@@ -61,18 +61,16 @@ class _MapPageState extends State<MapPage> {
 
         var rand = Random();
 
-        if(rand.nextDouble() < 0.3) {
-
-          if(held_bottles.isNotEmpty){
+        if (rand.nextDouble() < 0.3) {
+          if (held_bottles.isNotEmpty) {
             var bottle = held_bottles.removeLast();
 
             GeoPoint location = GeoPoint(position.latitude, position.longitude);
-            
+
             writeBottle(bottle.user, bottle.text, bottle.city, location);
-            
+
             print("BOTTLE PLACED");
           }
-
         }
       }
     });
@@ -130,7 +128,8 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
+      body: SingleChildScrollView(
+          child: LayoutBuilder(
         builder: (context, constraint) => Column(
           children: [
             Center(
@@ -188,16 +187,16 @@ class _MapPageState extends State<MapPage> {
                                   (bottle) => Marker(
                                       point: bottle.$2.location,
                                       child: GestureDetector(
-                                        child: 
-                                            Image.asset('assets/message_in_a_bottle.png'),
+                                        child: Image.asset(
+                                            'assets/message_in_a_bottle.png'),
                                         onTap: () {
                                           if (Geolocator.distanceBetween(
                                                   currentPosition.latitude,
                                                   currentPosition.longitude,
                                                   bottle.$2.location.latitude,
-                                                  bottle.$2.location.longitude) <=
+                                                  bottle
+                                                      .$2.location.longitude) <=
                                               25) {
-
                                             //remove bottle from database
                                             deleteBottle(bottle.$1);
 
@@ -243,7 +242,7 @@ class _MapPageState extends State<MapPage> {
             })
           ],
         ),
-      ),
+      )),
     );
   }
 }
