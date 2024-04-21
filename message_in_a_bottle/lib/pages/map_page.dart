@@ -31,7 +31,6 @@ class _MapPageState extends State<MapPage> {
   GeoPoint? _lastBottlePlacementPosition;
   List<Bottle> held_bottles = [];
   List<Marker> _markers = [];
-  
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -63,20 +62,17 @@ class _MapPageState extends State<MapPage> {
 
             writeBottle(bottle.user, bottle.text, bottle.city, location);
 
+            // Create a marker at the current location
+            Marker currentLocationMarker = Marker(
+                point: LatLng(position.latitude, position.longitude),
+                child: Opacity(
+                    opacity: 0.5,
+                    child: Image.asset('assets/inverse_in_a_bottle.png')));
 
-          // Create a marker at the current location
-          Marker currentLocationMarker = Marker(
-            point: LatLng(position.latitude, position.longitude),
-            child: Opacity(
-              opacity: 0.5,
-              child: Image.asset('assets/inverse_in_a_bottle.png')
-            )
-          );
-
-          // Update the state to include the new marker
-          setState(() {
-            _markers.add(currentLocationMarker);
-          });
+            // Update the state to include the new marker
+            setState(() {
+              _markers.add(currentLocationMarker);
+            });
 
             print("BOTTLE PLACED");
           }
@@ -148,110 +144,114 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         child: SingleChildScrollView(
-            child: Column(
-          children: [
-            Center(
-              child: Text(
-                "Explore & Read!",
-                style: TextStyle(
-                    fontSize: 0.1 * constraint.biggest.shortestSide,
-                    color: Colors
-                        .white, // set the text color to white for better visibility
-                    fontFamily: 'BebasNeue'),
-                textAlign: TextAlign.start,
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  "Explore & Read!",
+                  style: TextStyle(
+                      fontSize: 0.1 * constraint.biggest.shortestSide,
+                      color: Colors
+                          .white, // set the text color to white for better visibility
+                      fontFamily: 'BebasNeue'),
+                  textAlign: TextAlign.start,
+                ),
               ),
-            ),
-            Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
-                builder: (context, state, locState, child) {
-              Position? currentPosition = state.currentPosition;
-              if (currentPosition == null) {
-                return const CircularProgressIndicator();
-              } else {
-                return Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 3.0),
-                  ),
-                  height: constraint.biggest.shortestSide,
-                  width: 0.95 * constraint.biggest.shortestSide,
-                  child: FlutterMap(
-                      options: MapOptions(
-                          initialCenter: LatLng(currentPosition.latitude,
-                              currentPosition.longitude),
-                          initialZoom: 18),
-                      children: [
-                        TileLayer(
-                          urlTemplate:
-                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        ),
-                        CurrentLocationLayer(
-                          style: const LocationMarkerStyle(
-                              showAccuracyCircle: false),
-                          alignPositionOnUpdate: AlignOnUpdate.always,
-                        ),
-                        MarkerLayer(
-                            markers: locState.bottles
-                                .map(
-                                  (bottle) => Marker(
-                                      point: bottle.$2.location,
-                                      child: GestureDetector(
-                                        child: Image.asset(
-                                            'assets/message_in_a_bottle.png'),
-                                        onTap: () {
-                                          if (Geolocator.distanceBetween(
-                                                  currentPosition.latitude,
-                                                  currentPosition.longitude,
-                                                  bottle.$2.location.latitude,
-                                                  bottle
-                                                      .$2.location.longitude) <=
-                                              25) {
-                                            //remove bottle from database
-                                            deleteBottle(bottle.$1);
-                                            Provider.of<BottleLocationsProvider>(context, listen: false).removeBottle(bottle.$2);
+              Consumer2<CurrentUserLocationProvider, BottleLocationsProvider>(
+                  builder: (context, state, locState, child) {
+                Position? currentPosition = state.currentPosition;
+                if (currentPosition == null) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 3.0),
+                    ),
+                    height: constraint.biggest.shortestSide,
+                    width: 0.95 * constraint.biggest.shortestSide,
+                    child: FlutterMap(
+                        options: MapOptions(
+                            initialCenter: LatLng(currentPosition.latitude,
+                                currentPosition.longitude),
+                            initialZoom: 18),
+                        children: [
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          ),
+                          CurrentLocationLayer(
+                            style: const LocationMarkerStyle(
+                                showAccuracyCircle: false),
+                            alignPositionOnUpdate: AlignOnUpdate.always,
+                          ),
+                          MarkerLayer(
+                              markers: locState.bottles
+                                  .map(
+                                    (bottle) => Marker(
+                                        point: bottle.$2.location,
+                                        child: GestureDetector(
+                                          child: Image.asset(
+                                              'assets/message_in_a_bottle.png'),
+                                          onTap: () {
+                                            if (Geolocator.distanceBetween(
+                                                    currentPosition.latitude,
+                                                    currentPosition.longitude,
+                                                    bottle.$2.location.latitude,
+                                                    bottle.$2.location
+                                                        .longitude) <=
+                                                25) {
+                                              //remove bottle from database
+                                              deleteBottle(bottle.$1);
+                                              Provider.of<BottleLocationsProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .removeBottle(bottle.$2);
 
-                                            //add bottle to local storage
-                                            held_bottles.add(bottle.$2);
+                                              //add bottle to local storage
+                                              held_bottles.add(bottle.$2);
 
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.8,
-                                                    child: MessagePopup(
-                                                        bottle: bottle.$2,
-                                                        user:
-                                                            user!.displayName!),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          }
-                                        },
-                                      )),
-                                )
-                                .toList()),
-                        MarkerLayer(markers: _markers),
-                        CircleLayer(circles: [
-                          CircleMarker(
-                              useRadiusInMeter: true,
-                              point: LatLng(currentPosition.latitude,
-                                  currentPosition.longitude),
-                              color: Colors.blue.withOpacity(0.1),
-                              borderStrokeWidth: 3.0,
-                              borderColor: Colors.blue,
-                              radius: 20)
-                        ])
-                      ]),
-                );
-              }
-            }),
-            const SizedBox(height: 5.0),
-            Center(
-              child: SizedBox(
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                      child: MessagePopup(
+                                                          bottle: bottle.$2,
+                                                          user: user!
+                                                              .displayName!),
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            }
+                                          },
+                                        )),
+                                  )
+                                  .toList()),
+                          MarkerLayer(markers: _markers),
+                          CircleLayer(circles: [
+                            CircleMarker(
+                                useRadiusInMeter: true,
+                                point: LatLng(currentPosition.latitude,
+                                    currentPosition.longitude),
+                                color: Colors.blue.withOpacity(0.1),
+                                borderStrokeWidth: 3.0,
+                                borderColor: Colors.blue,
+                                radius: 20)
+                          ])
+                        ]),
+                  );
+                }
+              }),
+              const SizedBox(height: 5.0),
+              Center(
+                  child: SizedBox(
                 width: 200.0,
                 child: RawMaterialButton(
                   fillColor: const Color.fromARGB(255, 255, 255, 255),
@@ -270,7 +270,7 @@ class _MapPageState extends State<MapPage> {
                         fontFamily: 'Nunito-VariableFont'),
                   ),
                 ),
-              ),
+              )),
             ],
           ),
         ),
