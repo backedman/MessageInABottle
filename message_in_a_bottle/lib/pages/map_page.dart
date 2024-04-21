@@ -8,6 +8,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:message_in_a_bottle/pages/login.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/utils/global_objects.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
@@ -87,7 +88,15 @@ class _MapPageState extends State<MapPage> {
     _initLocationStream();
   }
 
-
+  Future<void> logOut() async {
+    await FirebaseAuth.instance.signOut();
+    if(context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage())
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +112,25 @@ class _MapPageState extends State<MapPage> {
                   textAlign: TextAlign.start,
                 ),
               ),
+              Center(
+                child: SizedBox(
+                  child: RawMaterialButton(
+                    fillColor: Colors.blue,
+                    elevation: 1.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    onPressed: () async {
+                      await logOut();
+                    },
+                    child: const Text(
+                      'Log Out',
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10.0),
               Consumer<CurrentUserLocationProvider>(
                   builder: (context, state, child) {
                 currentPosition = state.currentPosition;
