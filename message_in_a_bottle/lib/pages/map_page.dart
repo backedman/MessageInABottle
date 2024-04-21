@@ -90,7 +90,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
@@ -98,6 +98,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<BottleLocationsProvider>(context, listen: false).init();
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraint) => Column(
