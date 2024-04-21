@@ -30,6 +30,8 @@ class _MapPageState extends State<MapPage> {
   Position? currentPosition;
   GeoPoint? _lastBottlePlacementPosition;
   List<Bottle> held_bottles = [];
+  List<Marker> _markers = [];
+  
 
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
@@ -60,6 +62,21 @@ class _MapPageState extends State<MapPage> {
             GeoPoint location = GeoPoint(position.latitude, position.longitude);
 
             writeBottle(bottle.user, bottle.text, bottle.city, location);
+
+
+          // Create a marker at the current location
+          Marker currentLocationMarker = Marker(
+            point: LatLng(position.latitude, position.longitude),
+            child: Opacity(
+              opacity: 0.5,
+              child: Image.asset('assets/inverse_in_a_bottle.png')
+            )
+          );
+
+          // Update the state to include the new marker
+          setState(() {
+            _markers.add(currentLocationMarker);
+          });
 
             print("BOTTLE PLACED");
           }
@@ -194,65 +211,63 @@ class _MapPageState extends State<MapPage> {
                                             //add bottle to local storage
                                             held_bottles.add(bottle.$2);
 
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Center(
-                                                    child: SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.8,
-                                                      child: MessagePopup(
-                                                          bottle: bottle.$2,
-                                                          user: user!
-                                                              .displayName!),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }
-                                          },
-                                        )),
-                                  )
-                                  .toList()),
-                          CircleLayer(circles: [
-                            CircleMarker(
-                                useRadiusInMeter: true,
-                                point: LatLng(currentPosition.latitude,
-                                    currentPosition.longitude),
-                                color: Colors.blue.withOpacity(0.1),
-                                borderStrokeWidth: 3.0,
-                                borderColor: Colors.blue,
-                                radius: 20)
-                          ])
-                        ]),
-                  );
-                }
-              }),
-              const SizedBox(height: 5.0),
-              Center(
-                child: SizedBox(
-                  width: 200.0,
-                  child: RawMaterialButton(
-                    fillColor: const Color.fromARGB(255, 255, 255, 255),
-                    elevation: 1.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    onPressed: () async {
-                      await logOut();
-                    },
-                    child: const Text(
-                      'Log Out',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
-                          fontSize: 20.0,
-                          fontFamily: 'Nunito-VariableFont',
-                          fontWeight: FontWeight.bold),
-                    ),
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: MessagePopup(
+                                                        bottle: bottle.$2,
+                                                        user:
+                                                            user!.displayName!),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          }
+                                        },
+                                      )),
+                                )
+                                .toList()),
+                        MarkerLayer(markers: _markers),
+                        CircleLayer(circles: [
+                          CircleMarker(
+                              useRadiusInMeter: true,
+                              point: LatLng(currentPosition.latitude,
+                                  currentPosition.longitude),
+                              color: Colors.blue.withOpacity(0.1),
+                              borderStrokeWidth: 3.0,
+                              borderColor: Colors.blue,
+                              radius: 20)
+                        ])
+                      ]),
+                );
+              }
+            }),
+            const SizedBox(height: 5.0),
+            Center(
+              child: SizedBox(
+                width: 200.0,
+                child: RawMaterialButton(
+                  fillColor: const Color.fromARGB(255, 255, 255, 255),
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  onPressed: () async {
+                    await logOut();
+                  },
+                  child: const Text(
+                    'Log Out',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 0, 0, 0),
+                        fontSize: 20.0,
+                        fontFamily: 'Nunito-VariableFont'),
                   ),
                 ),
               ),
