@@ -153,7 +153,8 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -332,6 +333,6 @@ class LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-    );
+    ));
   }
 }
