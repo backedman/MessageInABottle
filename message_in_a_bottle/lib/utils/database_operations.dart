@@ -21,14 +21,21 @@ void writeBottle(user, message, city, location) {
     });
   }
 
-  void readData() {
-    firestore.collection('bottles').get()
-    .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print('${doc.id}: ${doc.data()}');
-      });
-    })
-    .catchError((error) {
-      print("Failed to retrieve bottles: $error");
+void readData() {
+  firestore.collection('bottles').get()
+  .then((QuerySnapshot querySnapshot) {
+    querySnapshot.docs.forEach((doc) {
+      print('${doc.id}: ${doc.data()}');
     });
-  }
+  })
+  .catchError((error) {
+    print("Failed to retrieve bottles: $error");
+  });
+}
+
+void deleteBottle(key) {
+
+    var collection = firestore.collection("bottles");
+
+    collection.doc(key).delete();
+}

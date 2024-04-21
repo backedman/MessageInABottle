@@ -6,10 +6,12 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:message_in_a_bottle/models/bottle.dart';
 import 'package:message_in_a_bottle/providers/bottle_locations_provider.dart';
 import 'package:message_in_a_bottle/pages/login.dart';
 import 'package:message_in_a_bottle/providers/curr_user_location.dart';
 import 'package:message_in_a_bottle/popups/message_popup.dart';
+import 'package:message_in_a_bottle/utils/database_operations.dart';
 import 'package:provider/provider.dart';
 
 class MapPage extends StatefulWidget {
@@ -27,6 +29,7 @@ class _MapPageState extends State<MapPage> {
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
+  List<Bottle> held_bottles = [];
 
   _MapPageState(this.user);
 
@@ -152,7 +155,7 @@ class _MapPageState extends State<MapPage> {
                             markers: locState.bottles
                                 .map(
                                   (bottle) => Marker(
-                                      point: bottle.location,
+                                      point: bottle.b.location,
                                       child: GestureDetector(
                                         child: 
                                             Image.asset('assets/message_in_a_bottle.png'),
@@ -160,9 +163,16 @@ class _MapPageState extends State<MapPage> {
                                           if (Geolocator.distanceBetween(
                                                   currentPosition.latitude,
                                                   currentPosition.longitude,
-                                                  bottle.location.latitude,
-                                                  bottle.location.longitude) <=
+                                                  bottle.b.location.latitude,
+                                                  bottle.b.location.longitude) <=
                                               25) {
+
+                                            //remove bottle from database
+                                            deleteBottle(bottle.a);
+
+                                            //add bottle to local storage
+                                            held_bottles.add(bottle.b);
+
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -174,7 +184,7 @@ class _MapPageState extends State<MapPage> {
                                                                 .width *
                                                             0.8,
                                                     child: MessagePopup(
-                                                        bottle: bottle,
+                                                        bottle: bottle.b,
                                                         user:
                                                             user!.displayName!),
                                                   ),
