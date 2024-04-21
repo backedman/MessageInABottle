@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'message-in-a-bottle-7ebe4.appspot.com',
     measurementId: 'G-ZT34JCT19V',
   );
+
 }
