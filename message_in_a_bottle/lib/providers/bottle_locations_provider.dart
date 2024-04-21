@@ -43,6 +43,7 @@ class BottleLocationsProvider extends ChangeNotifier {
     });
   }
 
+
   Future<void> removeBottle(Bottle bottle) async {
     (String, Bottle) botToRemove = bottles.firstWhere((tuple) => tuple.$2 == bottle);
 
