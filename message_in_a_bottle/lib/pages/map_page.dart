@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 class MapPage extends StatefulWidget {
   final User? user;
   const MapPage({super.key, required this.user});
+  
 
   @override
   State<MapPage> createState() => _MapPageState(user);
@@ -24,6 +25,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final User? user;
   late StreamSubscription<Position> _positionStream;
+  Position? currentPosition;
   final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
   );
@@ -103,7 +105,7 @@ class _MapPageState extends State<MapPage> {
               ),
               Consumer<CurrentUserLocationProvider>(
                   builder: (context, state, child) {
-                Position? currentPosition = state.currentPosition;
+                currentPosition = state.currentPosition;
                 if (currentPosition == null) {
                   return const CircularProgressIndicator();
                 } else {
@@ -112,8 +114,8 @@ class _MapPageState extends State<MapPage> {
                     width: 0.75 * constraint.biggest.shortestSide,
                     child: FlutterMap(
                         options: MapOptions(
-                            initialCenter: LatLng(currentPosition.latitude,
-                                currentPosition.longitude),
+                            initialCenter: LatLng(currentPosition!.latitude,
+                                currentPosition!.longitude),
                             initialZoom: 18),
                         children: [
                           TileLayer(
@@ -127,7 +129,7 @@ class _MapPageState extends State<MapPage> {
                           CircleLayer(circles: [
                             CircleMarker(
                                 useRadiusInMeter: true,
-                                point: LatLng(currentPosition.latitude, currentPosition.longitude),
+                                point: LatLng(currentPosition!.latitude, currentPosition!.longitude),
                                 color: Colors.blue.withOpacity(0.1),
                                 borderStrokeWidth: 3.0,
                                 borderColor: Colors.blue,
@@ -144,7 +146,7 @@ class _MapPageState extends State<MapPage> {
           builder: (context) => FloatingActionButton(
             onPressed: () {
               // Create a dummy Bottle object for demonstration
-              Bottle bottle = Bottle("Hello from the bottle", "1", "2");
+              Bottle bottle = Bottle("Hello from the bottle", "1", "2", GeoPoint(currentPosition!.latitude, currentPosition!.longitude));
 
             // Show the message popup
             showDialog(
@@ -153,7 +155,7 @@ class _MapPageState extends State<MapPage> {
                 return Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,
-                    child: MessagePopup(bottle: bottle, user: name),
+                    child: MessagePopup(bottle: bottle, user: user!.displayName!),
                   ),
                 );
               },
